@@ -3,90 +3,92 @@ package pieces
 import ()
 
 type Piece struct {
-	Name		string
-	Notation	string
 	Icon		rune
 	IsWhite		bool
+	Name		string
+	Notation	string
+	Position	int
 }
 
 var Pieces = map[string]Piece{
 	"BK": {
-		Name:		"k",
-		Notation:	"K",
 		Icon:		'♚',
 		IsWhite:	false,
+		Name:		"k",
+		Notation:	"K",
 	},
 	"BQ": {
-		Name:		"q",
-		Notation:	"Q",
 		Icon:		'♛',
 		IsWhite:	false,
+		Name:		"q",
+		Notation:	"Q",
 	},
 	"BR": {
-		Name:		"r",
-		Notation:	"R",
 		Icon:		'♜',
 		IsWhite:	false,
+		Name:		"r",
+		Notation:	"R",
 	},
 	"BB": {
-		Name:		"b",
-		Notation:	"B",
 		Icon:		'♝',
 		IsWhite:	false,
+		Name:		"b",
+		Notation:	"B",
 	},
 	"BN": {
-		Name:		"n",
-		Notation:	"N",
 		Icon:		'♞',
 		IsWhite:	false,
+		Name:		"n",
+		Notation:	"N",
 	},
 	"BP": {
-		Name:		"p",
-		Notation:	"",
 		Icon:		'♟',
 		IsWhite:	false,
+		Name:		"p",
+		Notation:	"",
 	},
 	"WK": {
-		Name:		"K",
-		Notation:	"K",
 		Icon:		'♔',
 		IsWhite:	true,
+		Name:		"K",
+		Notation:	"K",
 	},
 	"WQ": {
-		Name:		"Q",
-		Notation:	"Q",
 		Icon:		'♕',
 		IsWhite:	true,
+		Name:		"Q",
+		Notation:	"Q",
 	},
 	"WR": {
-		Name:		"R",
-		Notation:	"R",
 		Icon:		'♖',
 		IsWhite:	true,
+		Name:		"R",
+		Notation:	"R",
 	},
 	"WB": {
-		Name:		"B",
-		Notation:	"B",
 		Icon:		'♗',
 		IsWhite:	true,
+		Name:		"B",
+		Notation:	"B",
 	},
 	"WN": {
-		Name:		"N",
-		Notation:	"N",
 		Icon:		'♘',
 		IsWhite:	true,
+		Name:		"N",
+		Notation:	"N",
 	},
 	"WP": {
-		Name:		"P",
-		Notation:	"",
 		Icon:		'♙',
 		IsWhite:	true,
+		Name:		"P",
+		Notation:	"",
 	},
-	"_": {
-		Name:		" ",
-		Icon:		' ',
-		IsWhite:	false,
-	},
+}
+
+func GetPiece(fullName string, position int) Piece {
+	piece := Pieces[fullName]
+	piece.Position = position
+	return piece
 }
 
 // func validMoves(piece string, position int) func(...interface{}) []int {
