@@ -2,6 +2,7 @@ package board
 
 import (
 	"fmt"
+	"io"
 	"strings"
 	"strconv"
 
@@ -25,6 +26,7 @@ type Board struct {
 	UseIcons	bool
 	LastSquare	int
 	Squares		[64]Square
+	Writer		io.Writer
 }
 
 // move to util
@@ -52,7 +54,10 @@ func (board *Board) setPieces(fullName string, positions []int) {
 	for _, position := range positions {
 		board.Squares[position] = Square{
 			IsHighlighted: false,
-			Piece: pieces.GetPiece(fullName, position),
+		}
+
+		if len(fullName) > 0 {
+			board.Squares[position].Piece = pieces.GetPiece(fullName, position)
 		}
 	}
 }
@@ -101,9 +106,12 @@ func (board *Board) ResetBoard() {
 	// kings : 4 , 60
 	board.setPieces(farColor + "K", indices[4:5])
 	board.setPieces(nearColor + "K", indices[60:61])
+
+	// empty squares : 17 - 47
+	board.setPieces("", indices[17:47])
 }
 
-func (board Board) MovePiece(move string) {
+func (board *Board) MovePiece(move string) {
 	// - get last two characters of move and convert to new position
 	// - check if "x" to see if piece is taken on new position
 	// - if more than two characters left in string, use previous two characters as old position
@@ -167,18 +175,16 @@ func (board Board) MovePiece(move string) {
 
 	// once parsed, execute move
 
-	fmt.Print(pieceName, oldPosCoord, newPosCoord)
-	fmt.Println("")
-	fmt.Print(pieceName, oldPos, newPos)
+	// fmt.Print(pieceName, oldPosCoord, newPosCoord)
+	// fmt.Println("")
+	// fmt.Print(pieceName, oldPos, newPos)
 
 	piece := board.Squares[oldPos].Piece
 	board.Squares[oldPos].Piece = pieces.Piece{}
 	board.Squares[newPos].Piece = piece
-
-	board.DrawBoard()
 }
 
-func (board Board) DrawBoard() {
+func (board Board) DrawBoard() string {
 	flag := true
 	width := 2
 
@@ -186,7 +192,8 @@ func (board Board) DrawBoard() {
 		width = 5
 	}
 
-	fmt.Printf("\n");
+	out := ""
+	out += "\n";
 
 	for i, rank := range ranks {
 		flag = !flag
@@ -196,18 +203,18 @@ func (board Board) DrawBoard() {
 		}
 
 		if board.IsLarge {
-			fmt.Print(center(paddingSpace, width))
+			out += center(paddingSpace, width)
 
 			for j := 0; j < len(files); j++ {
 				flag = !flag
 
-				fmt.Printf("%v", DrawSquare(flag, paddingSpace, width))
+				out += fmt.Sprintf("%v", GenerateSquare(flag, paddingSpace, width))
 			}
 
-			fmt.Printf("\n");
+			out += "\n"
 		}
 
-		fmt.Print(center(rank, width))
+		out += center(rank, width)
 
 		for j := 0; j < len(files); j++ {
 			flag = !flag
@@ -224,42 +231,44 @@ func (board Board) DrawBoard() {
 				icon = " "
 			}
 
-			fmt.Printf("%v", DrawSquare(flag, icon, width))
+			out += fmt.Sprintf("%v", GenerateSquare(flag, icon, width))
 		}
 
-		fmt.Printf("\n");
+		out += "\n"
 
 		if board.IsLarge {
-			fmt.Print(center(paddingSpace, width))
+			out += center(paddingSpace, width)
 
 			for j := 0; j < len(files); j++ {
 				flag = !flag
 
-				fmt.Printf("%v", DrawSquare(flag, paddingSpace, width))
+				out += fmt.Sprintf("%v", GenerateSquare(flag, paddingSpace, width))
 			}
 
-			fmt.Printf("\n");
+			out += "\n"
 		}
 	}
 
 	if board.IsLarge {
-		fmt.Printf("\n");
+		out += "\n"
 	}
 
-	fmt.Printf(center(paddingSpace, width));
+	out += center(paddingSpace, width);
 
 	for i, file := range files {
 		if !board.IsWhiteSide {
 			file = files[(len(files) - 1) - i]
 		}
 
-		fmt.Print(center(file, width))
+		out += center(file, width)
 	}
 
-	fmt.Printf("\n");
+	out += "\n"
+
+	return out
 }
 
-func DrawSquare(isBgWhite bool, piece string, width int) string {
+func GenerateSquare(isBgWhite bool, piece string, width int) string {
 	bgFunc := BgBlack
 
 	if isBgWhite {
