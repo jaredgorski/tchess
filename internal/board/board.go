@@ -36,7 +36,7 @@ func center(s string, n int) string {
 	return strings.Repeat(paddingSpace, div) + s + strings.Repeat(paddingSpace, div)
 }
 
-var filesIndices = map[string]int{
+var filesIndicesWhite = map[string]int{
 	"A": 0,
 	"B": 1,
 	"C": 2,
@@ -45,6 +45,17 @@ var filesIndices = map[string]int{
 	"F": 5,
 	"G": 6,
 	"H": 7,
+}
+
+var filesIndicesBlack = map[string]int{
+	"A": 7,
+	"B": 6,
+	"C": 5,
+	"D": 4,
+	"E": 3,
+	"F": 2,
+	"G": 1,
+	"H": 0,
 }
 
 var files = [8]string{"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -99,13 +110,23 @@ func (board *Board) ResetBoard() {
 	board.setPieces(nearColor + "B", indices[58:59])
 	board.setPieces(nearColor + "B", indices[61:62])
 
-	// queens : 3 , 59
-	board.setPieces(farColor + "Q", indices[3:4])
-	board.setPieces(nearColor + "Q", indices[59:60])
+	// queens : 3 , 59 ; 4, 60
+	if board.IsWhiteSide {
+		board.setPieces(farColor + "Q", indices[3:4])
+		board.setPieces(nearColor + "Q", indices[59:60])
+	} else {
+		board.setPieces(farColor + "Q", indices[4:5])
+		board.setPieces(nearColor + "Q", indices[60:61])
+	}
 
-	// kings : 4 , 60
-	board.setPieces(farColor + "K", indices[4:5])
-	board.setPieces(nearColor + "K", indices[60:61])
+	// kings : 4 , 60 ; 3, 59
+	if board.IsWhiteSide {
+		board.setPieces(farColor + "K", indices[4:5])
+		board.setPieces(nearColor + "K", indices[60:61])
+	} else {
+		board.setPieces(farColor + "K", indices[3:4])
+		board.setPieces(nearColor + "K", indices[59:60])
+	}
 
 	// empty squares : 17 - 47
 	board.setPieces("", indices[17:47])
@@ -122,12 +143,19 @@ func (board *Board) MovePiece(move string) {
 	moveSlice := strings.Split(move, "")
 
 	var (
-		newPosCoord	string
-		newPos		int
-		oldPosCoord	string
-		oldPos		int
-		pieceName	string
+		filesIndices	map[string]int
+		newPosCoord		string
+		newPos			int
+		oldPosCoord		string
+		oldPos			int
+		pieceName		string
 	)
+
+	if board.IsWhiteSide {
+		filesIndices = filesIndicesWhite
+	} else {
+		filesIndices = filesIndicesBlack
+	}
 
 	for len(moveSlice) > 0 {
 		// pop last character from moveSlice
@@ -142,7 +170,12 @@ func (board *Board) MovePiece(move string) {
 			}
 
 			newPosCoord = char
-			newPos = (8 - i) * 8
+
+			if board.IsWhiteSide {
+				newPos = (8 - i) * 8
+			} else {
+				newPos = (i - 1) * 8
+			}
 
 			continue
 		} else if len(newPosCoord) < 2 {
@@ -158,7 +191,12 @@ func (board *Board) MovePiece(move string) {
 			}
 
 			oldPosCoord = char
-			oldPos = (8 - i) * 8
+
+			if board.IsWhiteSide {
+				oldPos = (8 - i) * 8
+			} else {
+				oldPos = (i - 1) * 8
+			}
 
 			continue
 		} else if len(oldPosCoord) < 2 {

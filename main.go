@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"net"
 	"os"
@@ -28,7 +29,11 @@ func cleanupAndExit(writer *uilive.Writer, code int) {
 }
 
 func main() {
-	arguments := os.Args
+	// parse arguments
+	ip := flag.String("ip", "", "If client, enter server IP to connect to")
+	port := flag.String("port", "8282", "Enter port to connect over")
+	flag.Parse()
+
 	out := clear
 
 	// set up reader and writer
@@ -44,21 +49,28 @@ func main() {
 		cleanupAndExit(writer, errorCode)
 	}()
 
-	// set up server or client
-	PORT := ":" + arguments[1]
-	ln, _ := net.Listen("tcp", PORT)
+	// set up server or client connection
+	isClientMode := len(*ip) > 0
 
-	out += fmt.Sprintf("\nServing on port %s\n", PORT)
-	fmt.Fprint(writer, out)
+	var conn net.Conn
 
-	conn, _ := ln.Accept()
+	if isClientMode {
+		conn, _ = net.Dial("tcp", *ip + ":" + *port)
+	} else {
+		ln, _ := net.Listen("tcp", ":" + *port)
 
-	out = clear
-	out += fmt.Sprintf("\nConnected on port %s\n", PORT)
-	fmt.Fprint(writer, out)
+		out += fmt.Sprintf("\nServing on port %s\n", *port)
+		fmt.Fprint(writer, out)
+
+		conn, _ = ln.Accept()
+
+		out = clear
+		out += fmt.Sprintf("\nConnected on port %s\n", *port)
+		fmt.Fprint(writer, out)
+	}
 
 	b := board.Board{
-		IsWhiteSide: true,
+		IsWhiteSide: !isClientMode,
 		IsLarge: true,
 		UseIcons: true,
 		LastSquare: 1,
@@ -78,7 +90,7 @@ func main() {
 			farColor = "White"
 		}
 
-		if myTurn && b.IsWhiteSide {
+		if myTurn {
 			out += nearColor + " to play"
 		} else {
 			out += farColor + " to play"
@@ -103,9 +115,13 @@ func main() {
 			} else {
 				b.MovePiece(input)
 			}
+
+			fmt.Fprintf(conn, input + "\n")
 		} else {
 			message, _ := bufio.NewReader(conn).ReadString('\n')
-			fmt.Print("Message Received:", string(message))
+			message = strings.Replace(message, "\n", "", -1)
+
+			b.MovePiece(message)
 		}
 
 		myTurn = !myTurn
