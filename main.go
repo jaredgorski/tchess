@@ -33,7 +33,7 @@ func main() {
 	ip := flag.String("ip", "", "If client, enter server IP to connect to")
 	port := flag.String("port", "8282", "Enter port to connect over")
 	large := flag.Bool("large", false, "Use large board")
-	piecesStyle := flag.String("pieces", "outline", "Set pieces style to 'outline', 'filled', or 'letter'")
+	piecesStyle := flag.String("pieces", "outline", "Set pieces style to \"outline\", \"filled\", or \"letter\"")
 	flag.Parse()
 
 	out := clear
