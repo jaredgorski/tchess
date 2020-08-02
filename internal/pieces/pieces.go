@@ -2,6 +2,8 @@ package pieces
 
 import (
 	"math"
+
+	"github.com/jaredgorski/tchess/internal/util"
 )
 
 type validPieceMoveFn func(int, int) bool
@@ -171,7 +173,10 @@ var validPieceMoves = map[string]validPieceMoveFn{
 		return isValid;
 	},
 	"N": func(oldPos int, newPos int) bool {
-		var isValid bool = true
+		var absoluteDifference int = int(math.Abs(float64(newPos - oldPos)))
+		var validAbsoluteDifferences = [4]int{6, 10, 15, 17}
+
+		var isValid bool = array.Contains(validAbsoluteDifferences[0:4], absoluteDifference)
 		return isValid;
 	},
 	"BP": func(oldPos int, newPos int) bool {
