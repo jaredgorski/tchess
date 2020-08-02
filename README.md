@@ -8,9 +8,8 @@
   <img src="https://github.com/jaredgorski/tchess/raw/master/.media/tchess-screenshot.png" width="500" />
 </div>
 
-The concept is simple: to facilitate a game of chess in the terminal, trading moves over a TCP connection.
-
 <h2>Usage</h1>
+
 ```
   -ip [server ip]
         If client, enter server IP to connect to
@@ -21,6 +20,8 @@ The concept is simple: to facilitate a game of chess in the terminal, trading mo
   -port [port number]
         Enter port to connect over (default "8282")
 ```
+
+The concept is simple: to facilitate a game of chess in the terminal, trading moves over a TCP connection.
 
 If you want to try `tchess` out, build the binary (`go build`), open up a server in one terminal window (`./tchess -port 8888`), and then connect with the client from a different terminal window (`./tchess -ip <server ip> -port 8888`). Moves can be entered in a very basic/explicit algebraic notation, structured thusly: `<piece> + <current square> + <destination square>`. _E.g. `Pc2c4` (move Pawn from C2 to C4)_
 
