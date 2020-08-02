@@ -10,10 +10,7 @@
 
 The concept is simple: to facilitate a game of chess in the terminal, trading moves over a TCP connection.
 
-<div align="center">
-  <h1>Usage</h1>
-</div>
-
+<h2>Usage</h1>
 ```
   -ip [server ip]
         If client, enter server IP to connect to
