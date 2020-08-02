@@ -98,6 +98,8 @@ func main() {
 			out += farColor + " to play"
 		}
 
+		out += "\n"
+
 		out += b.DrawBoard()
 
 		if myTurn {
