@@ -1,7 +1,9 @@
 # tchess
 Chess with friends in the terminal [wip]
 
-![](https://github.com/jaredgorski/tchess/raw/master/.media/tchess-screenshot.png)
+<div align="center">
+  <img src="https://github.com/jaredgorski/tchess/raw/master/.media/tchess-screenshot.png" width="500" />
+</div>
 
 The concept is simple: to facilitate a game of chess in the terminal, trading moves over a TCP connection.
 
