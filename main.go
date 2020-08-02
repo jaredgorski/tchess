@@ -32,6 +32,8 @@ func main() {
 	// parse arguments
 	ip := flag.String("ip", "", "If client, enter server IP to connect to")
 	port := flag.String("port", "8282", "Enter port to connect over")
+	large := flag.Bool("large", false, "Use large board")
+	piecesStyle := flag.String("pieces", "outline", "Set pieces style to 'outline', 'filled', or 'letter'")
 	flag.Parse()
 
 	out := clear
@@ -71,8 +73,8 @@ func main() {
 
 	b := board.Board{
 		IsWhiteSide: !isClientMode,
-		IsLarge: true,
-		UseIcons: true,
+		IsLarge: *large,
+		IconType: *piecesStyle,
 		LastSquare: 1,
 		Writer: writer,
 	}

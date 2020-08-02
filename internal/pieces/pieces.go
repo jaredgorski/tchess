@@ -8,6 +8,7 @@ type validPieceMoveFn func(int, int) bool
 
 type Piece struct {
 	Icon			rune
+	IconOutline		rune
 	IsWhite			bool
 	Name			string
 	Notation		string
@@ -18,6 +19,7 @@ type Piece struct {
 var Pieces = map[string]Piece{
 	"BK": {
 		Icon:		'♚',
+		IconOutline:		'♔',
 		IsWhite:	false,
 		Name:		"k",
 		Notation:	"K",
@@ -27,6 +29,7 @@ var Pieces = map[string]Piece{
 	},
 	"BQ": {
 		Icon:		'♛',
+		IconOutline:		'♕',
 		IsWhite:	false,
 		Name:		"q",
 		Notation:	"Q",
@@ -36,6 +39,7 @@ var Pieces = map[string]Piece{
 	},
 	"BR": {
 		Icon:		'♜',
+		IconOutline:		'♖',
 		IsWhite:	false,
 		Name:		"r",
 		Notation:	"R",
@@ -45,6 +49,7 @@ var Pieces = map[string]Piece{
 	},
 	"BB": {
 		Icon:		'♝',
+		IconOutline:		'♗',
 		IsWhite:	false,
 		Name:		"b",
 		Notation:	"B",
@@ -54,6 +59,7 @@ var Pieces = map[string]Piece{
 	},
 	"BN": {
 		Icon:		'♞',
+		IconOutline:		'♘',
 		IsWhite:	false,
 		Name:		"n",
 		Notation:	"N",
@@ -63,6 +69,7 @@ var Pieces = map[string]Piece{
 	},
 	"BP": {
 		Icon:		'♟',
+		IconOutline:		'♙',
 		IsWhite:	false,
 		Name:		"p",
 		Notation:	"",
@@ -71,7 +78,8 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"WK": {
-		Icon:		'♔',
+		Icon:		'♚',
+		IconOutline:		'♔',
 		IsWhite:	true,
 		Name:		"K",
 		Notation:	"K",
@@ -80,7 +88,8 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"WQ": {
-		Icon:		'♕',
+		Icon:		'♛',
+		IconOutline:		'♕',
 		IsWhite:	true,
 		Name:		"Q",
 		Notation:	"Q",
@@ -89,7 +98,8 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"WR": {
-		Icon:		'♖',
+		Icon:		'♜',
+		IconOutline:		'♖',
 		IsWhite:	true,
 		Name:		"R",
 		Notation:	"R",
@@ -98,7 +108,8 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"WB": {
-		Icon:		'♗',
+		Icon:		'♝',
+		IconOutline:		'♗',
 		IsWhite:	true,
 		Name:		"B",
 		Notation:	"B",
@@ -107,7 +118,8 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"WN": {
-		Icon:		'♘',
+		Icon:		'♞',
+		IconOutline:		'♘',
 		IsWhite:	true,
 		Name:		"N",
 		Notation:	"N",
@@ -116,7 +128,8 @@ var Pieces = map[string]Piece{
 		},
 	},
 	"WP": {
-		Icon:		'♙',
+		Icon:		'♟',
+		IconOutline:		'♙',
 		IsWhite:	true,
 		Name:		"P",
 		Notation:	"",

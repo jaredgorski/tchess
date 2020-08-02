@@ -23,7 +23,7 @@ type Square struct {
 type Board struct {
 	IsWhiteSide		bool
 	IsLarge			bool
-	UseIcons		bool
+	IconType		string
 	LastSquare		int
 	Squares			[64]Square
 	Writer			io.Writer
@@ -260,7 +260,7 @@ func (board Board) DrawBoard() string {
 			for j := 0; j < len(files); j++ {
 				flag = !flag
 
-				out += fmt.Sprintf("%v", GenerateSquare(flag, paddingSpace, width))
+				out += fmt.Sprintf("%v", GenerateSquare(flag, false, paddingSpace, width))
 			}
 
 			out += "\n"
@@ -273,17 +273,20 @@ func (board Board) DrawBoard() string {
 
 			index := (i * 8) + j
 			square := board.Squares[index]
-			icon := square.Piece.Name
+			piece := square.Piece
+			icon := piece.Name
 
 			if len(icon) > 0 {
-				if board.UseIcons {
+				if board.IconType == "outline" {
+					icon = string(square.Piece.IconOutline)
+				} else if board.IconType == "filled" {
 					icon = string(square.Piece.Icon)
 				}
 			} else {
 				icon = " "
 			}
 
-			out += fmt.Sprintf("%v", GenerateSquare(flag, icon, width))
+			out += fmt.Sprintf("%v", GenerateSquare(flag, piece.IsWhite, icon, width))
 		}
 
 		out += "\n"
@@ -294,7 +297,7 @@ func (board Board) DrawBoard() string {
 			for j := 0; j < len(files); j++ {
 				flag = !flag
 
-				out += fmt.Sprintf("%v", GenerateSquare(flag, paddingSpace, width))
+				out += fmt.Sprintf("%v", GenerateSquare(flag, false, paddingSpace, width))
 			}
 
 			out += "\n"
@@ -320,23 +323,34 @@ func (board Board) DrawBoard() string {
 	return out
 }
 
-func GenerateSquare(isBgWhite bool, piece string, width int) string {
+func GenerateSquare(isBgWhite bool, isFgWhite bool, piece string, width int) string {
 	bgFunc := BgBlack
 
 	if isBgWhite {
 		bgFunc = BgWhite
 	}
 
-	sprint := fmt.Sprintf("%s", bgFunc(FgBlack(center(piece, width))))
+	fgFunc := FgBlack
+
+	if isFgWhite {
+		fgFunc = FgWhite
+	}
+
+	sprint := fmt.Sprintf("%s", bgFunc(fgFunc(center(piece, width))))
 
 	return sprint
 }
 
 // move to util
 var (
-	BgBlack	= Color("\033[48;5;248m%s\033[0m")
-	BgWhite	= Color("\033[48;5;255m%s\033[0m")
+	// BgBlack	= Color("\033[48;5;248m%s\033[0m")
+	// BgWhite	= Color("\033[48;5;255m%s\033[0m")
+	// FgBlack	= Color("\033[38;5;0m%s\033[0m")
+
+	BgBlack	= Color("\033[48;5;137m%s\033[0m")
+	BgWhite	= Color("\033[48;5;180m%s\033[0m")
 	FgBlack	= Color("\033[38;5;0m%s\033[0m")
+	FgWhite	= Color("\033[38;5;255m%s\033[0m")
 )
 
 // move to util
