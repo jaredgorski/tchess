@@ -21,12 +21,12 @@ type Square struct {
 //	Squares is an array that indexes each square of the chess board from
 //	0 (A1) to 63 (H8).
 type Board struct {
-	IsWhiteSide	bool
-	IsLarge		bool
-	UseIcons	bool
-	LastSquare	int
-	Squares		[64]Square
-	Writer		io.Writer
+	IsWhiteSide		bool
+	IsLarge			bool
+	UseIcons		bool
+	LastSquare		int
+	Squares			[64]Square
+	Writer			io.Writer
 }
 
 // move to util
@@ -132,7 +132,7 @@ func (board *Board) ResetBoard() {
 	board.setPieces("", indices[17:47])
 }
 
-func (board *Board) MovePiece(move string) {
+func (board Board) ParseMove(move string) (int, int) {
 	// - get last two characters of move and convert to new position
 	// - check if "x" to see if piece is taken on new position
 	// - if more than two characters left in string, use previous two characters as old position
@@ -217,9 +217,23 @@ func (board *Board) MovePiece(move string) {
 	// fmt.Println("")
 	// fmt.Print(pieceName, oldPos, newPos)
 
+	return oldPos, newPos
+}
+
+func (board *Board) MovePiece(oldPos int, newPos int) {
 	piece := board.Squares[oldPos].Piece
 	board.Squares[oldPos].Piece = pieces.Piece{}
 	board.Squares[newPos].Piece = piece
+}
+
+func (board Board) IsValidMove(oldPos int, newPos int) bool {
+	piece := board.Squares[oldPos].Piece
+	validPieceMove := piece.ValidPieceMove(oldPos, newPos)
+	validBoardMove := newPos < 64
+	validNewSquare := board.Squares[newPos].Piece.Name == "" || board.Squares[newPos].Piece.IsWhite != piece.IsWhite
+
+	isValid := validPieceMove && validBoardMove && validNewSquare
+	return isValid
 }
 
 func (board Board) DrawBoard() string {

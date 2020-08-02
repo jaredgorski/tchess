@@ -113,7 +113,13 @@ func main() {
 			} else if input == "reset" {
 				b.ResetBoard()
 			} else {
-				b.MovePiece(input)
+				oldPos, newPos := b.ParseMove(input)
+
+				if b.IsValidMove(oldPos, newPos) {
+					b.MovePiece(oldPos, newPos)
+				} else {
+					continue
+				}
 			}
 
 			fmt.Fprintf(conn, input + "\n")
@@ -121,7 +127,8 @@ func main() {
 			message, _ := bufio.NewReader(conn).ReadString('\n')
 			message = strings.Replace(message, "\n", "", -1)
 
-			b.MovePiece(message)
+			oldPos, newPos := b.ParseMove(message)
+			b.MovePiece(oldPos, newPos)
 		}
 
 		myTurn = !myTurn
