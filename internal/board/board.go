@@ -9,7 +9,7 @@ import (
 	"github.com/jaredgorski/tchess/internal/pieces"
 )
 
-// move to util
+// TODO: move to util
 var paddingSpace = string('\u00A0')
 
 type Square struct {
@@ -29,7 +29,7 @@ type Board struct {
 	Writer			io.Writer
 }
 
-// move to util
+// TODO: move to util
 func center(s string, n int) string {
 	div := n / 2
 
@@ -211,12 +211,6 @@ func (board Board) ParseMove(move string) (int, int) {
 		}
 	}
 
-	// once parsed, execute move
-
-	// fmt.Print(pieceName, oldPosCoord, newPosCoord)
-	// fmt.Println("")
-	// fmt.Print(pieceName, oldPos, newPos)
-
 	return oldPos, newPos
 }
 
@@ -341,19 +335,15 @@ func GenerateSquare(isBgWhite bool, isFgWhite bool, piece string, width int) str
 	return sprint
 }
 
-// move to util
+// TODO: move to util
 var (
-	// BgBlack	= Color("\033[48;5;248m%s\033[0m")
-	// BgWhite	= Color("\033[48;5;255m%s\033[0m")
-	// FgBlack	= Color("\033[38;5;0m%s\033[0m")
-
 	BgBlack	= Color("\033[48;5;137m%s\033[0m")
 	BgWhite	= Color("\033[48;5;180m%s\033[0m")
 	FgBlack	= Color("\033[38;5;0m%s\033[0m")
 	FgWhite	= Color("\033[38;5;255m%s\033[0m")
 )
 
-// move to util
+// TODO: move to util
 func Color(colorString string) func(...interface{}) string {
 	sprint := func(args ...interface{}) string {
 		return fmt.Sprintf(colorString,
